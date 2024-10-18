@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
     const { message } = req.body;
     if (!message) {
         return res.status(400).json({
-            message: `Message is required`
+            message: `Message is a required field`
         });
     }
 

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-// Defining the Comments Schema
+// Defining the Comment Schema
 const commentSchema = new mongoose.Schema({
     message: { type: String, required: true },
     timestamp: { type: Date, default: Date.now },
