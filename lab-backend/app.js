@@ -7,10 +7,7 @@ const PORT = 3000;
 
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/socialMedia', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect('mongodb://localhost:27017/socialMedia')
     .then(() => console.log('Database Connected Successfully!!'))
     .catch((err) => console.error(`Failed to connect to the Database: ${err}`))
 
