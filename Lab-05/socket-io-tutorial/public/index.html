@@ -13,7 +13,29 @@
     <button id="sendMessageBtn">Send Message</button>
 
     <script>
-      // The Socket.IO client-side code will go here
+      // The Socket.IO client-side code
+      const socket = io();
+
+      const connectBtn = document.getElementById("connectBtn");
+      const disconnectBtn = document.getElementById("disconnectBtn");
+      const sendMessageBtn = document.getElementById("sendMessageBtn");
+
+      connectBtn.onclick = () => {
+        socket.connect();
+      };
+
+      disconnectBtn.onclick = () => {
+        socket.disconnect();
+      };
+
+      sendMessageBtn.onclick = () => {
+        const message = prompt(`Enter your Message: `);
+        socket.emit("chat message:", message);
+      };
+
+      socket.on("chat message", (msg) => {
+        console.log("Message reveived from server:", msg);
+      });
     </script>
   </body>
 </html>

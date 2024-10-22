@@ -1,4 +1,3 @@
-const { Socket } = require('dgram');
 const express = require('express');
 const http = require('http');
 const path = require('path');
@@ -24,8 +23,8 @@ io.on('connection', (socket) => {
         console.log('User disconnected');
     });
 
-    socket.on('chat message', (msg) => {
+    socket.on("chat message", (msg) => {
         console.log(`Message received: ${msg}`);
-        io.emit(`Chat message: ${msg}`); // This will broadcast the message to all connected clients
+        io.emit('chat message:', msg); // This will broadcast the message to all connected clients
     });
 });
