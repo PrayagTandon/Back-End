@@ -1,22 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Transactions from './Transactions';
 import Transfer from './Transfer';
 import Blocks from './Blocks';
-import { generateMockEthereumData } from './MockData';
 
 const Dashboard = ({ section }) => {
     const [transactions, setTransactions] = useState([]);
     const [latestBlocks, setLatestBlocks] = useState([]);
 
-    // Fetching the mock data
+    // Fetch transaction data from backend instead of generating mock data
     useEffect(() => {
-        const mockData = generateMockEthereumData(20);
-        setTransactions(mockData);
-        // To show only 2 latest blocks in the Recent Transactions section...
-        setLatestBlocks(mockData.slice(0, 2));
+        const fetchTransactions = async () => {
+            try {
+                const response = await axios.get('/api/history'); // Adjust API URL if needed
+                setTransactions(response.data);
+                // Set latest blocks to display recent transactions
+                setLatestBlocks(response.data.slice(0, 2));
+            } catch (error) {
+                console.error('Error fetching transactions:', error);
+            }
+        };
+
+        fetchTransactions();
     }, []);
 
-    // TO add new transactions to all transactions list
+    // Add new transactions to the state
     const addNewTransaction = (newTx) => {
         setTransactions((prevTx) => [newTx, ...prevTx]);
         setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 1)]);

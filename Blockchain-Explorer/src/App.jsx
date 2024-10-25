@@ -15,7 +15,7 @@ const App = () => {
     // Fetch transactions from the backend
     const fetchTransactions = async () => {
       try {
-        const response = await axios.get('/api/transactions/history');
+        const response = await axios.get('/api/history');
         setTransactions(response.data);
         setLatestBlocks(response.data.slice(0, 2));  // Show only the latest two blocks
       } catch (error) {
@@ -29,7 +29,7 @@ const App = () => {
   // Function to add a new transaction (used in Transfer component)
   const addNewTransaction = async (newTransaction) => {
     try {
-      const response = await axios.post('/api/transactions/send', newTransaction);
+      const response = await axios.post('/api/transfer', newTransaction);
       const savedTransaction = response.data;
 
       // Update state after successful save

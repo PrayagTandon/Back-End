@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
-import { faker } from '@faker-js/faker';
 import CryptoJS from 'crypto-js';
 
 const Transfer = ({ addNewTransaction, availableAddresses }) => {
     const [fromAddress, setFromAddress] = useState('');
-    const [toAddress, setToAddress] = useState(faker.finance.ethereumAddress());
+    const [toAddress, setToAddress] = useState('');
     const [amount, setAmount] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Generate transaction hash
         const newTransaction = {
-            transactionHash: CryptoJS.SHA256(faker.datatype.uuid()).toString(),
+            transactionHash: CryptoJS.SHA256(`${fromAddress}-${toAddress}-${Date.now()}`).toString(),
             from: fromAddress,
             to: toAddress,
             amount: `${amount} ETH`,
-            gasUsed: faker.datatype.number({ min: 21000, max: 500000 }),
+            gasUsed: Math.floor(Math.random() * 100000),  // Replace with actual backend logic if available
             timestamp: new Date().toISOString(),
         };
 
+        // Add the new transaction to the list
         addNewTransaction(newTransaction);
         setAmount('');
+        setToAddress('');
+        setFromAddress('');
     };
 
     return (
@@ -47,7 +50,7 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
             <div className="mb-4">
                 <label className="block text-sm font-medium">To Address</label>
                 <select
-                    value={fromAddress}
+                    value={toAddress}
                     onChange={(e) => setToAddress(e.target.value)}
                     className="mt-1 block w-full p-3 border rounded-md "
                     required
