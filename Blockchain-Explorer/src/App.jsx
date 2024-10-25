@@ -12,7 +12,7 @@ const App = () => {
   const [latestBlocks, setLatestBlocks] = useState([]);
 
   useEffect(() => {
-    const mockData = generateMockEthereumData(50);
+    const mockData = generateMockEthereumData(20);
     setTransactions(mockData);
     setLatestBlocks(mockData.slice(0, 2)); // Show only two latest blocks
   }, []);

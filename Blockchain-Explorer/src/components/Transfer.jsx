@@ -24,7 +24,7 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="border p-4 rounded-lg bg-gray-50">
+        <form onSubmit={handleSubmit} className="border p-6 rounded-lg bg-gray-50 w-2/4 m-auto">
             <h3 className="font-semibold text-lg mb-2">Create New Transfer</h3>
 
             <div className="mb-4">
@@ -32,7 +32,7 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
                 <select
                     value={fromAddress}
                     onChange={(e) => setFromAddress(e.target.value)}
-                    className="mt-1 block w-full p-2 border rounded-md"
+                    className="mt-1 block w-full p-3 border rounded-md "
                     required
                 >
                     <option value="">Select From Address</option>
@@ -46,12 +46,19 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">To Address</label>
-                <input
-                    type="text"
-                    value={toAddress}
+                <select
+                    value={fromAddress}
                     onChange={(e) => setToAddress(e.target.value)}
-                    className="mt-1 block w-full p-2 border rounded-md"
-                />
+                    className="mt-1 block w-full p-3 border rounded-md "
+                    required
+                >
+                    <option value="">Select To Address</option>
+                    {availableAddresses.map((address, index) => (
+                        <option key={index} value={address}>
+                            {address}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="mb-4">
@@ -65,7 +72,7 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
                 />
             </div>
 
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md shadow">
+            <button type="submit" className="bg-blue-800 text-white px-4 py-2 rounded-md shadow-md transition-all hover:bg-blue-600 hover:cursor-pointer">
                 Transfer
             </button>
         </form>
