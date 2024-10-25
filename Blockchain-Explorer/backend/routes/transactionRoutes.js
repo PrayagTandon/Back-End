@@ -1,8 +1,8 @@
 const express = require('express');
-const { getTransactionHistory, sendTransfer } = require('../controllers/transactionController');
+const { getAllTransactions, sendTransfer } = require('../controllers/transactionController');
 const router = express.Router();
 
-router.get('/history', getTransactionHistory);
-router.post('/send', sendTransfer);
+router.get('/history', getAllTransactions);
+router.post('/transfer', sendTransfer);
 
 module.exports = router;
