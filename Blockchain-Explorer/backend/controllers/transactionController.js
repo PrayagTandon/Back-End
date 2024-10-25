@@ -33,3 +33,13 @@ exports.sendTransfer = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+exports.getAllTransactions = async (req, res) => {
+    try {
+        const transactions = await Transaction.find();
+        console.log("Fetched transactions:", transactions); // Log transactions for debugging
+        res.json(transactions);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};

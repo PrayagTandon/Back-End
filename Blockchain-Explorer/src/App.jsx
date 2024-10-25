@@ -50,7 +50,17 @@ const App = () => {
         <div className="p-6">
           <Routes>
             <Route path="/transactions" element={<Transactions transactions={transactions} />} />
-            <Route path="/transfer" element={<Transfer addNewTransaction={addNewTransaction} availableAddresses={transactions.map((tx) => tx.from)} />} />
+            {/* <Route path="/transfer" element={<Transfer addNewTransaction={addNewTransaction} availableAddresses={transactions.map((tx) => tx.from)} />} /> */}
+            <Route
+              path="/transfer"
+              element={
+                <Transfer
+                  addNewTransaction={addNewTransaction}
+                  availableAddresses={(Array.isArray(transactions) ? transactions : []).map((tx) => tx.from)}
+                />
+              }
+            />
+
             <Route path="/blocks" element={<Blocks transactions={transactions} />} />
             <Route path="/dashboard" element={
               <div>
