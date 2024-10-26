@@ -12,10 +12,10 @@ exports.getAllTransactions = async (req, res) => {
 };
 
 exports.sendTransfer = async (req, res) => {
-    const { from, to, amount } = req.body;
+    let { from, to, amount } = req.body;
 
     try {
-        // Ensure from, to, and amount are provided and valid
+        // Ensure from, to, and amount are provided
         if (!from || !to || !amount) {
             return res.status(400).json({ message: 'From, to, and amount are required' });
         }
@@ -27,7 +27,8 @@ exports.sendTransfer = async (req, res) => {
         if (isNaN(amount)) {
             return res.status(400).json({ message: 'Amount must be a valid number' });
         }
-        // Generate transaction hash and create the transaction object
+
+        // Generate transaction hash and create transaction object
         const receiptHash = CryptoJS.SHA256(`${from}-${to}-${Date.now()}`).toString();
         const newTransaction = new Transaction({
             from,
@@ -38,11 +39,10 @@ exports.sendTransfer = async (req, res) => {
             timestamp: new Date().toISOString(),
         });
 
-        // Save the transaction to MongoDB
         const savedTransaction = await newTransaction.save();
         res.status(201).json(savedTransaction);
     } catch (error) {
-        console.error('Error in sendTransfer:', error);  // Log error for debugging
-        res.status(500).json({ message: error.message }); // Send error message in response
+        console.error('Error in sendTransfer:', error);
+        res.status(500).json({ message: error.message });
     }
 };
