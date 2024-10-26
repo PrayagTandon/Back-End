@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Transactions = ({ transactions }) => {
     const [currentPage, setCurrentPage] = useState(1);
@@ -22,8 +23,8 @@ const Transactions = ({ transactions }) => {
         <div>
             <h3 className="font-semibold text-lg mb-2">All Transactions</h3>
             <ul className="flex justify-center items-center gap-6 flex-wrap">
-                {currentTransactions.map((tx, index) => (
-                    <li key={index} className="border p-4 rounded-md mb-2 shadow-lg odd:bg-[#dde9e2] even:bg-[#fed9e7]">
+                {currentTransactions.map((tx) => (
+                    <li key={tx.transactionHash} className="border p-4 rounded-md mb-2 shadow-lg odd:bg-[#dde9e2] even:bg-[#fed9e7]">
                         <strong>Transaction Hash:</strong> {tx.transactionHash} <br />
                         <strong>From:</strong> {tx.from} <br />
                         <strong>To:</strong> {tx.to} <br />
