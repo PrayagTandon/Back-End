@@ -10,14 +10,9 @@ const Blocks = ({ transactions }) => {
         setSelectedAddress(address);
 
         // Find the block (transaction) by matching the 'from' or 'to' address
-        const block = transactions.find((tx) => tx.from === address || tx.to === address);
-
-        // If block is found, set it, else reset the block
-        if (block) {
-            setSelectedBlock(block);
-        } else {
-            setSelectedBlock(null);
-        }
+        const block = (Array.isArray(transactions) ? transactions : []).find(
+            (tx) => tx.from === address || tx.to === address
+        );
     };
 
     return (
@@ -30,7 +25,7 @@ const Blocks = ({ transactions }) => {
             >
                 <option value="">Select an Address</option>
                 {/* List addresses from transactions */}
-                {transactions.map((tx, index) => (
+                {(Array.isArray(transactions) ? transactions : []).map((tx, index) => (
                     <option key={index} value={tx.from}>
                         {tx.from}
                     </option>
@@ -39,13 +34,14 @@ const Blocks = ({ transactions }) => {
 
             {/* Conditionally render BlockDetails or an error message */}
             {selectedBlock ? (
-                <BlockDetails {...selectedBlock} />
+                <div className="border p-4 rounded-md mt-4">
+                    <strong>Transaction Hash:</strong> {selectedBlock.transactionHash} <br />
+                    <strong>From:</strong> {selectedBlock.from} <br />
+                    <strong>To:</strong> {selectedBlock.to} <br />
+                    <strong>Amount:</strong> {selectedBlock.amount} ETH
+                </div>
             ) : (
-                selectedAddress && (
-                    <div className="bg-yellow-100 text-red-700 p-4 mt-4 rounded-md">
-                        No transaction found for the selected address.
-                    </div>
-                )
+                selectedAddress && <div>No transaction found for the selected address.</div>
             )}
         </div>
     );
