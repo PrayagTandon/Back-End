@@ -14,7 +14,7 @@ const Transfer = ({ addNewTransaction }) => {
             transactionHash: CryptoJS.SHA256(`${fromAddress}-${toAddress}-${Date.now()}`).toString(),
             from: fromAddress,
             to: toAddress,
-            amount: `${amount} ETH`,
+            amount: parseFloat(amount),
             gasUsed: Math.floor(Math.random() * 100000), // Mock gas used; replace with actual logic if needed
             timestamp: new Date().toISOString(),
         };

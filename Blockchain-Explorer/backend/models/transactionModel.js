@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const transactionSchema = new mongoose.Schema({
-    source: { type: String, required: true },
-    destination: { type: String, required: true },
+    from: { type: String, required: true },
+    to: { type: String, required: true },
     amount: { type: Number, required: true },
     gasUsed: { type: Number },
     receiptHash: { type: String, required: true },

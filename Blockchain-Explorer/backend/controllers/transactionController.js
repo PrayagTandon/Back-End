@@ -11,11 +11,23 @@ exports.getAllTransactions = async (req, res) => {
     }
 };
 
-// Send a new transfer (via the Transfer component in frontend)
-// controllers/transactionController.js
 exports.sendTransfer = async (req, res) => {
     const { from, to, amount } = req.body;
+
     try {
+        // Ensure from, to, and amount are provided and valid
+        if (!from || !to || !amount) {
+            return res.status(400).json({ message: 'From, to, and amount are required' });
+        }
+
+        // Convert amount to a number if it's a string
+        amount = parseFloat(amount);
+
+        // Validate that amount is a number
+        if (isNaN(amount)) {
+            return res.status(400).json({ message: 'Amount must be a valid number' });
+        }
+        // Generate transaction hash and create the transaction object
         const receiptHash = CryptoJS.SHA256(`${from}-${to}-${Date.now()}`).toString();
         const newTransaction = new Transaction({
             from,
@@ -25,9 +37,12 @@ exports.sendTransfer = async (req, res) => {
             receiptHash,
             timestamp: new Date().toISOString(),
         });
+
+        // Save the transaction to MongoDB
         const savedTransaction = await newTransaction.save();
         res.status(201).json(savedTransaction);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error('Error in sendTransfer:', error);  // Log error for debugging
+        res.status(500).json({ message: error.message }); // Send error message in response
     }
 };
