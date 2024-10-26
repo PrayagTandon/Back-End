@@ -11,10 +11,10 @@ const Dashboard = ({ section }) => {
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
-                const response = await axios.get('/api/transactions/history');
+                const response = await axios.get('/api/history');
                 const data = Array.isArray(response.data) ? response.data : [];
                 setTransactions(data);
-                setLatestBlocks(data.slice(0, 2));  // Set latest blocks only if data is an array
+                setLatestBlocks(data.slice(0, 6));  // Set latest blocks only if data is an array
             } catch (error) {
                 console.error('Error fetching transactions:', error);
                 setTransactions([]);

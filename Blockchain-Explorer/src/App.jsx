@@ -50,7 +50,6 @@ const App = () => {
         <div className="p-6">
           <Routes>
             <Route path="/transactions" element={<Transactions transactions={transactions} />} />
-            {/* <Route path="/transfer" element={<Transfer addNewTransaction={addNewTransaction} availableAddresses={transactions.map((tx) => tx.from)} />} /> */}
             <Route
               path="/transfer"
               element={
@@ -66,14 +65,6 @@ const App = () => {
               <div>
                 <h2 className="text-xl font-bold">Blockchain Overview</h2>
                 <ul>
-                  {/* {latestBlocks.map((block, index) => (
-                    <li key={index} className="border p-2 rounded">
-                      <strong>Transaction Hash:</strong> {block.transactionHash} <br />
-                      <strong>From:</strong> {block.from} <br />
-                      <strong>To:</strong> {block.to} <br />
-                      <strong>Amount:</strong> {block.amount} ETH
-                    </li>
-                  ))} */}
                   {(Array.isArray(latestBlocks) ? latestBlocks : []).map((block, index) => (
                     <li key={index} className="border p-2 rounded">
                       <strong>Transaction Hash:</strong> {block.transactionHash} <br />

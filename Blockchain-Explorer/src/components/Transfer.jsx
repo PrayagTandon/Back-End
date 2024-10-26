@@ -9,17 +9,15 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        // Generate transaction hash
         const newTransaction = {
             transactionHash: CryptoJS.SHA256(`${fromAddress}-${toAddress}-${Date.now()}`).toString(),
             from: fromAddress,
             to: toAddress,
             amount: `${amount} ETH`,
-            gasUsed: Math.floor(Math.random() * 100000),  // Replace with actual backend logic if available
+            gasUsed: Math.floor(Math.random() * 100000),
             timestamp: new Date().toISOString(),
         };
 
-        // Add the new transaction to the list
         addNewTransaction(newTransaction);
         setAmount('');
         setToAddress('');
@@ -35,10 +33,11 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
                 <select
                     value={fromAddress}
                     onChange={(e) => setFromAddress(e.target.value)}
-                    className="mt-1 block w-full p-3 border rounded-md "
+                    className="mt-1 block w-full p-3 border rounded-md"
                     required
+                    disabled={!availableAddresses.length} // Disable if no addresses are available
                 >
-                    <option value="">Select From Address</option>
+                    <option value="">{availableAddresses.length ? "Select From Address" : "No available addresses"}</option>
                     {availableAddresses.map((address, index) => (
                         <option key={index} value={address}>
                             {address}
@@ -52,10 +51,11 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
                 <select
                     value={toAddress}
                     onChange={(e) => setToAddress(e.target.value)}
-                    className="mt-1 block w-full p-3 border rounded-md "
+                    className="mt-1 block w-full p-3 border rounded-md"
                     required
+                    disabled={!availableAddresses.length}
                 >
-                    <option value="">Select To Address</option>
+                    <option value="">{availableAddresses.length ? "Select To Address" : "No available addresses"}</option>
                     {availableAddresses.map((address, index) => (
                         <option key={index} value={address}>
                             {address}
