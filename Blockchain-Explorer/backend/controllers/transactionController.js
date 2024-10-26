@@ -12,33 +12,21 @@ exports.getAllTransactions = async (req, res) => {
 };
 
 // Send a new transfer (via the Transfer component in frontend)
+// controllers/transactionController.js
 exports.sendTransfer = async (req, res) => {
-    const { source, destination, amount } = req.body;
-
+    const { from, to, amount } = req.body;
     try {
-        // Create a new transaction object
-        const receiptHash = CryptoJS.SHA256(`${source}-${destination}-${Date.now()}`).toString();
+        const receiptHash = CryptoJS.SHA256(`${from}-${to}-${Date.now()}`).toString();
         const newTransaction = new Transaction({
-            source,
-            destination,
+            from,
+            to,
             amount,
-            gasUsed: Math.floor(Math.random() * 100000),  // Mock gas used
+            gasUsed: Math.floor(Math.random() * 100000),
             receiptHash,
+            timestamp: new Date().toISOString(),
         });
-
-        // Save the transaction to MongoDB
         const savedTransaction = await newTransaction.save();
         res.status(201).json(savedTransaction);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-exports.getAllTransactions = async (req, res) => {
-    try {
-        const transactions = await Transaction.find();
-        console.log("Fetched transactions:", transactions); // Log transactions for debugging
-        res.json(transactions);
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

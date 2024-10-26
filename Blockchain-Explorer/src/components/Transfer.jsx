@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CryptoJS from 'crypto-js';
 
-const Transfer = ({ addNewTransaction, availableAddresses }) => {
+const Transfer = ({ addNewTransaction }) => {
     const [fromAddress, setFromAddress] = useState('');
     const [toAddress, setToAddress] = useState('');
     const [amount, setAmount] = useState('');
@@ -9,19 +9,23 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        // Generate transaction hash
         const newTransaction = {
             transactionHash: CryptoJS.SHA256(`${fromAddress}-${toAddress}-${Date.now()}`).toString(),
             from: fromAddress,
             to: toAddress,
             amount: `${amount} ETH`,
-            gasUsed: Math.floor(Math.random() * 100000),
+            gasUsed: Math.floor(Math.random() * 100000), // Mock gas used; replace with actual logic if needed
             timestamp: new Date().toISOString(),
         };
 
+        // Add the new transaction to the list
         addNewTransaction(newTransaction);
-        setAmount('');
-        setToAddress('');
+
+        // Clear form fields
         setFromAddress('');
+        setToAddress('');
+        setAmount('');
     };
 
     return (
@@ -30,38 +34,26 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">From Address</label>
-                <select
+                <input
+                    type="text"
                     value={fromAddress}
                     onChange={(e) => setFromAddress(e.target.value)}
                     className="mt-1 block w-full p-3 border rounded-md"
+                    placeholder="Enter from address"
                     required
-                    disabled={!availableAddresses.length} // Disable if no addresses are available
-                >
-                    <option value="">{availableAddresses.length ? "Select From Address" : "No available addresses"}</option>
-                    {availableAddresses.map((address, index) => (
-                        <option key={index} value={address}>
-                            {address}
-                        </option>
-                    ))}
-                </select>
+                />
             </div>
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">To Address</label>
-                <select
+                <input
+                    type="text"
                     value={toAddress}
                     onChange={(e) => setToAddress(e.target.value)}
                     className="mt-1 block w-full p-3 border rounded-md"
+                    placeholder="Enter to address"
                     required
-                    disabled={!availableAddresses.length}
-                >
-                    <option value="">{availableAddresses.length ? "Select To Address" : "No available addresses"}</option>
-                    {availableAddresses.map((address, index) => (
-                        <option key={index} value={address}>
-                            {address}
-                        </option>
-                    ))}
-                </select>
+                />
             </div>
 
             <div className="mb-4">
@@ -71,6 +63,7 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     className="mt-1 block w-full p-2 border rounded-md"
+                    placeholder="Enter amount in ETH"
                     required
                 />
             </div>

@@ -29,10 +29,8 @@ const App = () => {
   // Function to add a new transaction (used in Transfer component)
   const addNewTransaction = async (newTransaction) => {
     try {
-      const response = await axios.post('/api/transfer', newTransaction);
+      const response = await axios.post('http://localhost:5000/api/transfer', newTransaction);  // Update the URL
       const savedTransaction = response.data;
-
-      // Update state after successful save
       setTransactions((prev) => [savedTransaction, ...prev]);
       setLatestBlocks((prev) => [savedTransaction, ...prev.slice(0, 1)]);
     } catch (error) {
