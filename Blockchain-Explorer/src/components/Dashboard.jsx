@@ -13,6 +13,7 @@ const Dashboard = ({ section }) => {
             try {
                 const response = await axios.get('/api/history');
                 const data = Array.isArray(response.data) ? response.data : [];
+                console.log("Fetched transactions:", data);  // Debugging: check fetched data
                 setTransactions(data);
                 setLatestBlocks(data.slice(0, 6));
             } catch (error) {
@@ -22,13 +23,12 @@ const Dashboard = ({ section }) => {
             }
         };
 
-        // Empty dependency array ensures fetch only runs once
         fetchTransactions();
     }, []);
 
     const addNewTransaction = (newTx) => {
         setTransactions((prevTx) => [newTx, ...prevTx]);
-        setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 5)]); // Limit to 6 items
+        setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 1)]);
     };
 
     const availableAddresses = Array.isArray(transactions) ? transactions.map((tx) => tx.from) : [];
@@ -41,7 +41,7 @@ const Dashboard = ({ section }) => {
                     <div className='w-[95%]'>
                         <h3 className="font-semibold text-lg mb-4">Latest Blocks</h3>
                         <ul className='flex flex-col gap-4'>
-                            {latestBlocks.map((block, index) => (
+                            {(Array.isArray(latestBlocks) ? latestBlocks : []).map((block, index) => (
                                 <li key={index} className="border-2 rounded-md py-3 px-4 bg-[#95a9f2] border-[#193dc1] flex flex-col gap-1">
                                     <strong>Transaction Hash:</strong> {block.transactionHash} <br />
                                     <strong>From:</strong> {block.from} <br />

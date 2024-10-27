@@ -1,13 +1,12 @@
-// Logic for MongoDB Connection...
+// config/database.js
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 const connectDB = async () => {
     try {
-        const conn = await mongoose.connect(process.env.MONGO_URI);
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/blockchainExplorer');
+        console.log('MongoDB connected');
     } catch (error) {
-        console.error(`Error: ${error.message}`);
+        console.error('MongoDB connection error:', error);
         process.exit(1);
     }
 };

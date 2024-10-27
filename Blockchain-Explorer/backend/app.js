@@ -1,19 +1,19 @@
+// app.js
 const express = require('express');
 const cors = require('cors');
 const transactionRoutes = require('./routes/transactionRoutes');
 const connectDB = require('./config/database');
-require('dotenv').config();
+
+const app = express();
 
 // Connect to MongoDB
 connectDB();
-
-const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/api', transactionRoutes);  // Prefix all routes with /api/transactions
+app.use('/api/transactions', transactionRoutes);
 
 module.exports = app;

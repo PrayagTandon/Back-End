@@ -5,34 +5,34 @@ const Transactions = ({ transactions = [] }) => {
     const transactionsPerPage = 8;
     const [currentTransactions, setCurrentTransactions] = useState([]);
 
-    const totalPages = Math.ceil(transactions.length / transactionsPerPage);
+    // Calculate total pages and guard against overflows
+    const totalPages = Math.max(1, Math.ceil(transactions.length / transactionsPerPage));
 
-    // Ensure currentPage is within bounds whenever transactions length changes
-    useEffect(() => {
-        if (currentPage > totalPages) {
-            setCurrentPage(totalPages);
-        } else if (currentPage < 1) {
-            setCurrentPage(1);
-        }
-    }, [totalPages, currentPage]);
+    // Debugging: log data to confirm received transactions
+    console.log("Total Transactions:", transactions.length);
+    console.log("Current Page:", currentPage, "Total Pages:", totalPages);
 
-    // Update `currentTransactions` whenever `transactions` or `currentPage` changes
     useEffect(() => {
         if (Array.isArray(transactions) && transactions.length > 0) {
             const indexOfLastTransaction = currentPage * transactionsPerPage;
             const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
             setCurrentTransactions(transactions.slice(indexOfFirstTransaction, indexOfLastTransaction));
         } else {
-            setCurrentTransactions([]); // Set to an empty array if transactions is empty or not an array
+            setCurrentTransactions([]);
         }
     }, [transactions, currentPage]);
 
-    // Prevent currentPage from going out of range
     const goToPage = (page) => {
         if (page >= 1 && page <= totalPages) {
             setCurrentPage(page);
         }
     };
+
+    // Generate a limited range of pagination buttons
+    const paginationButtons = Array.from(
+        { length: Math.min(totalPages, 5) },
+        (_, i) => i + currentPage - Math.floor(5 / 2)
+    ).filter(page => page > 0 && page <= totalPages);
 
     return (
         <div>
@@ -50,13 +50,13 @@ const Transactions = ({ transactions = [] }) => {
 
             {/* Pagination Controls */}
             <div className="flex justify-center mt-4">
-                {Array.from({ length: totalPages }, (_, index) => (
+                {paginationButtons.map((page) => (
                     <button
-                        key={index + 1}
-                        onClick={() => goToPage(index + 1)}
-                        className={`px-4 py-2 mx-1 border rounded hover:bg-blue-600 hover:cursor-pointer hover:text-white ${currentPage === index + 1 ? 'bg-blue-800 text-white' : 'bg-white text-black'}`}
+                        key={page}
+                        onClick={() => goToPage(page)}
+                        className={`px-4 py-2 mx-1 border rounded hover:bg-blue-600 hover:cursor-pointer hover:text-white ${currentPage === page ? 'bg-blue-800 text-white' : 'bg-white text-black'}`}
                     >
-                        {index + 1}
+                        {page}
                     </button>
                 ))}
             </div>
