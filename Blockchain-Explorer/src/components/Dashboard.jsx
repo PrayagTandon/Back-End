@@ -5,8 +5,8 @@ import Transfer from './Transfer';
 import Blocks from './Blocks';
 
 const Dashboard = ({ section }) => {
-    const [transactions, setTransactions] = useState([]);  // Initialize as an array
-    const [latestBlocks, setLatestBlocks] = useState([]);  // Initialize as an array
+    const [transactions, setTransactions] = useState([]);
+    const [latestBlocks, setLatestBlocks] = useState([]);
 
     useEffect(() => {
         const fetchTransactions = async () => {
@@ -14,20 +14,21 @@ const Dashboard = ({ section }) => {
                 const response = await axios.get('/api/history');
                 const data = Array.isArray(response.data) ? response.data : [];
                 setTransactions(data);
-                setLatestBlocks(data.slice(0, 6));  // Set latest blocks only if data is an array
+                setLatestBlocks(data.slice(0, 6));
             } catch (error) {
                 console.error('Error fetching transactions:', error);
                 setTransactions([]);
-                setLatestBlocks([]);  // Reset latestBlocks on error
+                setLatestBlocks([]);
             }
         };
 
+        // Empty dependency array ensures fetch only runs once
         fetchTransactions();
     }, []);
 
     const addNewTransaction = (newTx) => {
         setTransactions((prevTx) => [newTx, ...prevTx]);
-        setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 1)]);
+        setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 5)]); // Limit to 6 items
     };
 
     const availableAddresses = Array.isArray(transactions) ? transactions.map((tx) => tx.from) : [];
@@ -40,7 +41,7 @@ const Dashboard = ({ section }) => {
                     <div className='w-[95%]'>
                         <h3 className="font-semibold text-lg mb-4">Latest Blocks</h3>
                         <ul className='flex flex-col gap-4'>
-                            {(Array.isArray(latestBlocks) ? latestBlocks : []).map((block, index) => (
+                            {latestBlocks.map((block, index) => (
                                 <li key={index} className="border-2 rounded-md py-3 px-4 bg-[#95a9f2] border-[#193dc1] flex flex-col gap-1">
                                     <strong>Transaction Hash:</strong> {block.transactionHash} <br />
                                     <strong>From:</strong> {block.from} <br />

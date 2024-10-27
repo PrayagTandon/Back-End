@@ -23,7 +23,7 @@ const Transactions = ({ transactions = [] }) => {
             const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
             setCurrentTransactions(transactions.slice(indexOfFirstTransaction, indexOfLastTransaction));
         } else {
-            setCurrentTransactions([]);
+            setCurrentTransactions([]); // Set to an empty array if transactions is empty or not an array
         }
     }, [transactions, currentPage]);
 
@@ -38,7 +38,7 @@ const Transactions = ({ transactions = [] }) => {
         <div>
             <h3 className="font-semibold text-lg mb-2">All Transactions</h3>
             <ul className="flex justify-center items-center gap-6 flex-wrap">
-                {currentTransactions.map((tx, index) => (
+                {(Array.isArray(currentTransactions) ? currentTransactions : []).map((tx, index) => (
                     <li key={tx.transactionHash || `${index}-${tx.amount}`} className="border p-4 rounded-md mb-2 shadow-lg odd:bg-[#dde9e2] even:bg-[#fed9e7]">
                         <strong>Transaction Hash:</strong> {tx.transactionHash} <br />
                         <strong>From:</strong> {tx.from} <br />
