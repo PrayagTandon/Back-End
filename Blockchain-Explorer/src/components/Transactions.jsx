@@ -1,45 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-const Transactions = ({ transactions = [] }) => {
+const Transactions = ({ transactions }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const transactionsPerPage = 8;
-    const [currentTransactions, setCurrentTransactions] = useState([]);
 
-    // Calculate total pages and guard against overflows
-    const totalPages = Math.max(1, Math.ceil(transactions.length / transactionsPerPage));
+    //Setting up the pagination to show All transactions.
+    const indexOfLastTransaction = currentPage * transactionsPerPage;
+    const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+    const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
-    // Debugging: log data to confirm received transactions
-    console.log("Total Transactions:", transactions.length);
-    console.log("Current Page:", currentPage, "Total Pages:", totalPages);
+    // Function to calaculate Total pages
+    const totalPages = Math.ceil(transactions.length / transactionsPerPage);
 
-    useEffect(() => {
-        if (Array.isArray(transactions) && transactions.length > 0) {
-            const indexOfLastTransaction = currentPage * transactionsPerPage;
-            const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
-            setCurrentTransactions(transactions.slice(indexOfFirstTransaction, indexOfLastTransaction));
-        } else {
-            setCurrentTransactions([]);
-        }
-    }, [transactions, currentPage]);
-
-    const goToPage = (page) => {
-        if (page >= 1 && page <= totalPages) {
-            setCurrentPage(page);
-        }
+    // Page change handler
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
-
-    // Generate a limited range of pagination buttons
-    const paginationButtons = Array.from(
-        { length: Math.min(totalPages, 5) },
-        (_, i) => i + currentPage - Math.floor(5 / 2)
-    ).filter(page => page > 0 && page <= totalPages);
 
     return (
         <div>
-            <h3 className="font-semibold text-lg mb-2">All Transactions</h3>
-            <ul className="flex justify-center items-center gap-6 flex-wrap">
-                {(Array.isArray(currentTransactions) ? currentTransactions : []).map((tx, index) => (
-                    <li key={tx.transactionHash || `${index}-${tx.amount}`} className="border p-4 rounded-md mb-2 shadow-lg odd:bg-[#dde9e2] even:bg-[#fed9e7]">
+            <h3 className="font-semibold text-lg mb-4">All Transactions</h3>
+            <ul className='flex flex-col gap-4'>
+                {currentTransactions.map((tx, index) => (
+                    <li key={index} className="border-2 rounded-md py-3 px-4 bg-[#8aeac7] border-[#ccc62a] flex flex-col gap-1">
                         <strong>Transaction Hash:</strong> {tx.transactionHash} <br />
                         <strong>From:</strong> {tx.from} <br />
                         <strong>To:</strong> {tx.to} <br />
@@ -48,15 +31,15 @@ const Transactions = ({ transactions = [] }) => {
                 ))}
             </ul>
 
-            {/* Pagination Controls */}
+            {/*  Implementing Pagination */}
             <div className="flex justify-center mt-4">
-                {paginationButtons.map((page) => (
+                {[...Array(totalPages).keys()].map((number) => (
                     <button
-                        key={page}
-                        onClick={() => goToPage(page)}
-                        className={`px-4 py-2 mx-1 border rounded hover:bg-blue-600 hover:cursor-pointer hover:text-white ${currentPage === page ? 'bg-blue-800 text-white' : 'bg-white text-black'}`}
+                        key={number + 1}
+                        onClick={() => handlePageChange(number + 1)}
+                        className={`px-4 py-2 mx-1 border rounded-lg ${currentPage === number + 1 ? 'bg-blue-800 cursor-pointer text-white' : 'bg-white text-black'}`}
                     >
-                        {page}
+                        {number + 1}
                     </button>
                 ))}
             </div>

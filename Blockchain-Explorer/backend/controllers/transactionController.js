@@ -1,36 +1,52 @@
 const Transaction = require('../models/transactionModel');
-const CryptoJS = require('crypto-js');
+const crypto = require('crypto');
 
-// Fetch transaction history
 const getTransactionHistory = async (req, res) => {
     try {
-        const transactions = await Transaction.find({}).lean();
-        res.json(transactions);
+        const transactions = await Transaction.find({});
+        res.status(200).json(transactions);
     } catch (error) {
         console.error("Error fetching transactions:", error);
         res.status(500).json({ error: "Failed to fetch transactions" });
     }
 };
 
-// Example placeholder for a transaction send function
-const sendTransaction = async (req, res) => {
-    const { from, to, amount } = req.body;
+const sendTransfer = async (req, res) => {
+    const { source, destination, amount } = req.body;
     try {
-        const newTransaction = new Transaction({
-            transactionHash: `0x${Math.random().toString(36).substr(2, 64)}`,  // Random transaction hash for demo purposes
-            from,
-            to,
-            amount
+        const transactionHash = crypto.randomBytes(16).toString('hex');
+        const receiptHash = crypto.randomBytes(16).toString('hex');
+        const gasUsed = Math.floor(Math.random() * 1000) + 1;
+
+        const transaction = new Transaction({
+            transactionHash,
+            from: source,
+            to: destination,
+            amount,
+            status: 'success',
+            gasUsed,
+            receiptHash
         });
-        await newTransaction.save();
-        res.status(201).json(newTransaction);
+
+        await transaction.save();
+
+        const receipt = {
+            transactionHash,
+            from: source,
+            to: destination,
+            amount,
+            gasUsed,
+            receiptHash,
+        };
+
+        res.status(201).json(receipt);
     } catch (error) {
-        console.error("Error creating transaction:", error);
-        res.status(500).json({ error: "Failed to create transaction" });
+        console.error("Error processing transaction:", error);
+        res.status(500).json({ error: "Failed to process transaction" });
     }
 };
 
 module.exports = {
     getTransactionHistory,
-    sendTransaction
+    sendTransfer
 };

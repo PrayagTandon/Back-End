@@ -1,59 +1,62 @@
 import React, { useState } from 'react';
+import { faker } from '@faker-js/faker';
 import CryptoJS from 'crypto-js';
 
-const Transfer = ({ addNewTransaction }) => {
+const Transfer = ({ addNewTransaction, availableAddresses }) => {
     const [fromAddress, setFromAddress] = useState('');
-    const [toAddress, setToAddress] = useState('');
+    const [toAddress, setToAddress] = useState(faker.finance.ethereumAddress());
     const [amount, setAmount] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        // Generate transaction hash
         const newTransaction = {
-            transactionHash: CryptoJS.SHA256(`${fromAddress}-${toAddress}-${Date.now()}`).toString(),
+            transactionHash: CryptoJS.SHA256(faker.string.uuid()).toString(),
             from: fromAddress,
             to: toAddress,
-            amount: parseFloat(amount),
-            gasUsed: Math.floor(Math.random() * 100000), // Mock gas used; replace with actual logic if needed
+            amount: `${amount} ETH`,
+            gasUsed: faker.number.float({ min: 21000, max: 500000 }),
             timestamp: new Date().toISOString(),
         };
-
-        // Add the new transaction to the list
         addNewTransaction(newTransaction);
-
-        // Clear form fields
-        setFromAddress('');
-        setToAddress('');
         setAmount('');
     };
 
     return (
-        <form onSubmit={handleSubmit} className="border p-6 rounded-lg bg-gray-50 w-2/4 m-auto">
+        <form onSubmit={handleSubmit} className="border-2 border-orange-700 p-4 rounded-lg bg-gray-50 mt-8">
             <h3 className="font-semibold text-lg mb-2">Create New Transfer</h3>
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">From Address</label>
-                <input
-                    type="text"
+                <select
                     value={fromAddress}
                     onChange={(e) => setFromAddress(e.target.value)}
-                    className="mt-1 block w-full p-3 border rounded-md"
-                    placeholder="Enter from address"
+                    className="mt-1 block w-full p-2 border rounded-md"
                     required
-                />
+                >
+                    <option value="">Select From Address</option>
+                    {availableAddresses.map((address, index) => (
+                        <option key={index} value={address}>
+                            {address}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">To Address</label>
-                <input
-                    type="text"
+                <select
                     value={toAddress}
-                    onChange={(e) => setToAddress(e.target.value)}
-                    className="mt-1 block w-full p-3 border rounded-md"
-                    placeholder="Enter to address"
+                    onChange={(e) => setFromAddress(e.target.value)}
+                    className="mt-1 block w-full p-2 border rounded-md"
                     required
-                />
+                >
+                    <option value="">Select To Address</option>
+                    {availableAddresses.map((address, index) => (
+                        <option key={index} value={address}>
+                            {address}
+                        </option>
+                    ))}
+                </select>
             </div>
 
             <div className="mb-4">
@@ -63,12 +66,11 @@ const Transfer = ({ addNewTransaction }) => {
                     value={amount}
                     onChange={(e) => setAmount(e.target.value)}
                     className="mt-1 block w-full p-2 border rounded-md"
-                    placeholder="Enter amount in ETH"
                     required
                 />
             </div>
 
-            <button type="submit" className="bg-blue-800 text-white px-4 py-2 rounded-md shadow-md transition-all hover:bg-blue-600 hover:cursor-pointer">
+            <button type="submit" className="bg-[#036642] text-white px-4 py-2 rounded-md shadow-lg hover:bg-[#1c7555] cursor-pointer">
                 Transfer
             </button>
         </form>
