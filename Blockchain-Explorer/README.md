@@ -12,18 +12,18 @@
 
 This project is an Ethereum Blockchain Explorer with a landing page that allows users to:
 
-- ### View all blockchain transactions with pagination.
-- ### Create new Ethereum transfers.
-- ### Retrieve and display block details based on selected addresses.
+- View all blockchain transactions with pagination.
+- Create new Ethereum transfers.
+- Retrieve and display block details based on selected addresses.
 
 The backend is built with Node.js and MongoDB, while the frontend is powered by React, Vite, and Tailwind CSS.
 
 ## Features
 
-- ### Transactions Overview: Displays all blockchain transactions with pagination.
-- ### Transfer Creation: Allows users to create a new Ethereum transfer, which is then displayed in the latest blocks.
-- ### Block Details: Allows users to select a block by address and view its details.
-- ### Navigation: Simple routing with links to Transactions, Transfer, and Blocks sections.
+- Transactions Overview: Displays all blockchain transactions with pagination.
+- Transfer Creation: Allows users to create a new Ethereum transfer, which is then displayed in the latest blocks.
+- Block Details: Allows users to select a block by address and view its details.
+- Navigation: Simple routing with links to Transactions, Transfer, and Blocks sections.
 
 ## Tech Stack
 
@@ -37,14 +37,14 @@ The backend is built with Node.js and MongoDB, while the frontend is powered by 
 
 ## API Endpoints
 
-## Transactions
+### Transactions
 
-- ### GET /api/transactions/history - Retrieves all transaction records.
-- ### POST /api/transactions/send - Creates a new transaction and returns a transaction receipt.
+- GET /api/transactions/history - Retrieves all transaction records.
+- POST /api/transactions/send - Creates a new transaction and returns a transaction receipt.
 
-## Blocks
+### Blocks
 
-- ### GET /api/blocks/addresses - Fetches a list of unique Ethereum addresses for use in the Blocks component.
+- GET /api/blocks/addresses - Fetches a list of unique Ethereum addresses for use in the Blocks component.
 
 ## References
 
