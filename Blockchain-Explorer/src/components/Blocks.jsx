@@ -6,25 +6,33 @@ import BlockDetails from './BlockDetails';
 
 const Blocks = ({ transactions }) => {
     const [selectedAddress, setSelectedAddress] = useState('');
-    const [addresses, setAddresses] = useState([]);  // Initialize as an empty array
+    const [addresses, setAddresses] = useState([]);
+    const [selectedBlock, setSelectedBlock] = useState(null);
 
     useEffect(() => {
         const fetchAddresses = async () => {
             try {
                 const response = await axios.get('/api/blocks/addresses');
-                setAddresses(Array.isArray(response.data) ? response.data : []);  // Ensure addresses is an array
+                setAddresses(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error("Error fetching addresses:", error);
-                setAddresses([]);  // Set to empty array on error
+                setAddresses([]);
             }
         };
 
         fetchAddresses();
     }, []);
 
-    const handleOnChange = (e) => {
+    const handleOnChange = async (e) => {
         const address = e.target.value;
         setSelectedAddress(address);
+        try {
+            const response = await axios.get(`/api/blocks/details/${address}`);
+            setSelectedBlock(response.data);
+        } catch (error) {
+            console.error("Error fetching block details:", error);
+            setSelectedBlock(null);
+        }
     };
 
     return (
