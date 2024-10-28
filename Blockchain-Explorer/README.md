@@ -10,7 +10,13 @@
 
 ## Ethereum Blockchain Explorer Landing Page
 
-Built a Landing Page for an Ethereum Blockchain Explorer, where we can see the transactions, create a new transfer and even find information regarding a block.
+This project is an Ethereum Blockchain Explorer with a landing page that allows users to:
+
+- ### View all blockchain transactions with pagination.
+- ### Create new Ethereum transfers.
+- ### Retrieve and display block details based on selected addresses.
+
+The backend is built with Node.js and MongoDB, while the frontend is powered by React, Vite, and Tailwind CSS.
 
 ## Features
 
@@ -19,20 +25,33 @@ Built a Landing Page for an Ethereum Blockchain Explorer, where we can see the t
 - ### Block Details: Allows users to select a block by address and view its details.
 - ### Navigation: Simple routing with links to Transactions, Transfer, and Blocks sections.
 
-## Tech Used
+## Tech Stack
 
-- React: JavaScript library for building user interfaces.
-- Vite: Fast build tool for React projects.
-- Tailwind CSS: Utility-first CSS framework for styling.
-- Material-UI: React UI framework for modern components.
-- CryptoJS: Library for generating transaction hashes using SHA256.
-- @faker-js/faker: Used to generate mock Ethereum data (addresses, transactions)
+### Frontend
+
+- React, Vite, Tailwind CSS, Material-UI and CryptoJS
+
+### Backend
+
+- Node.js, Express.js, MongoDB and Mongoose
+
+## API Endpoints
+
+## Transactions
+
+- ### GET /api/transactions/history - Retrieves all transaction records.
+- ### POST /api/transactions/send - Creates a new transaction and returns a transaction receipt.
+
+## Blocks
+
+- ### GET /api/blocks/addresses - Fetches a list of unique Ethereum addresses for use in the Blocks component.
 
 ## References
 
 - [React Docs](https://react.dev/)
 - [MaterialUI Docs](https://mui.com/material-ui/getting-started/)
 - [Tailwind CSS - Docs](https://tailwindcss.com/docs/installation)
-- [Faker-JS Docs](https://fakerjs.dev/guide/)
 - [Pagination Tutorial - Youtube](https://www.youtube.com/watch?v=wAGIOCqS8tk)
 - [React Crash Course - Youtube](https://www.youtube.com/watch?v=LDB4uaJ87e0&t=22s)
+- [MongoDB Docs](https://www.mongodb.com/docs/manual/)
+- [ExpressJS Docs](https://expressjs.com/en/guide/routing.html)
