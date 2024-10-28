@@ -1,5 +1,3 @@
-// Transfer.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Receipt from './Receipt';
@@ -22,7 +20,6 @@ const Transfer = ({ addNewTransaction }) => {
             setReceipt(response.data);
             addNewTransaction(response.data);
 
-            // Clear the form fields after successful submission
             setFromAddress('');
             setToAddress('');
             setAmount('');

@@ -1,5 +1,4 @@
-// BlockDetails.jsx
-
+// This component is used to show the Block details for selected address..
 import React from 'react';
 
 const BlockDetails = ({ transactionHash, from, to, amount, status, gasUsed }) => {

@@ -1,10 +1,9 @@
-// Transactions.jsx
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Transactions = () => {
-    const [transactions, setTransactions] = useState([]); // Initialize as an empty array
+    const [transactions, setTransactions] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const transactionsPerPage = 6;
 
@@ -12,10 +11,10 @@ const Transactions = () => {
         const fetchTransactions = async () => {
             try {
                 const response = await axios.get('/api/transactions/history');
-                setTransactions(Array.isArray(response.data) ? response.data : []); // Ensure transactions is an array
+                setTransactions(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error("Error fetching transactions:", error);
-                setTransactions([]); // Set to empty array on error
+                setTransactions([]);
             }
         };
 
@@ -26,7 +25,7 @@ const Transactions = () => {
     const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
     const currentTransactions = Array.isArray(transactions)
         ? transactions.slice(indexOfFirstTransaction, indexOfLastTransaction)
-        : []; // Ensure currentTransactions is always an array
+        : [];
 
     const totalPages = Math.ceil(transactions.length / transactionsPerPage);
 

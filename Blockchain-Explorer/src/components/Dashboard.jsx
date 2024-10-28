@@ -1,5 +1,3 @@
-// Dashboard.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Transactions from './Transactions';
@@ -8,7 +6,7 @@ import Blocks from './Blocks';
 
 const Dashboard = ({ section }) => {
     const [transactions, setTransactions] = useState([]);
-    const [latestBlocks, setLatestBlocks] = useState([]);  // Initialize as an empty array
+    const [latestBlocks, setLatestBlocks] = useState([]);
 
     useEffect(() => {
         const fetchTransactions = async () => {
