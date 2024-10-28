@@ -9,10 +9,8 @@ const Blocks = ({ transactions }) => {
         const address = e.target.value;
         setSelectedAddress(address);
 
-        // To find the transaction realted to current address
         const block = transactions.find((tx) => tx.from === address || tx.to === address);
 
-        // Using Ternary Operator to Display the block....
         setSelectedBlock(block ? {
             address: block.from,
             balance: block.balance || 'N/A',

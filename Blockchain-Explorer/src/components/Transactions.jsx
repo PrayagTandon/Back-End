@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 const Transactions = ({ transactions }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const transactionsPerPage = 8;
+    const transactionsPerPage = 6;
 
     //Setting up the pagination to show All transactions.
     const indexOfLastTransaction = currentPage * transactionsPerPage;
@@ -22,7 +22,7 @@ const Transactions = ({ transactions }) => {
             <h3 className="font-semibold text-lg mb-4">All Transactions</h3>
             <ul className='flex flex-col gap-4'>
                 {currentTransactions.map((tx, index) => (
-                    <li key={index} className="border-2 rounded-md py-3 px-4 bg-[#8aeac7] border-[#ccc62a] flex flex-col gap-1">
+                    <li key={index} className="border-2 rounded-md py-3 px-4 odd:bg-[#f584a0] even:bg-[#d381de] border-[#803a0c] flex flex-col gap-1">
                         <strong>Transaction Hash:</strong> {tx.transactionHash} <br />
                         <strong>From:</strong> {tx.from} <br />
                         <strong>To:</strong> {tx.to} <br />

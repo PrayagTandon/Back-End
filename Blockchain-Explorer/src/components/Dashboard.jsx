@@ -2,21 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Transactions from './Transactions';
 import Transfer from './Transfer';
 import Blocks from './Blocks';
-import { generateMockEthereumData } from './MockData';
 
 const Dashboard = ({ section }) => {
     const [transactions, setTransactions] = useState([]);
     const [latestBlocks, setLatestBlocks] = useState([]);
 
-    // Fetching the mock data
+    // This will be updated later to fetch data from the backend
     useEffect(() => {
-        const mockData = generateMockEthereumData(20);
-        setTransactions(mockData);
-        // To show only 2 latest blocks in the Recent Transactions section...
-        setLatestBlocks(mockData.slice(0, 2));
+        setTransactions([]);  // Empty initial state for transactions
+        setLatestBlocks([]);   // Empty initial state for latest blocks
     }, []);
 
-    // TO add new transactions to all transactions list
+    // Add new transaction to all transactions and latest blocks list
     const addNewTransaction = (newTx) => {
         setTransactions((prevTx) => [newTx, ...prevTx]);
         setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 1)]);

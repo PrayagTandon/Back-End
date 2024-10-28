@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
-import { faker } from '@faker-js/faker';
-import CryptoJS from 'crypto-js';
 
 const Transfer = ({ addNewTransaction, availableAddresses }) => {
     const [fromAddress, setFromAddress] = useState('');
-    const [toAddress, setToAddress] = useState(faker.finance.ethereumAddress());
+    const [toAddress, setToAddress] = useState('');
     const [amount, setAmount] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        // Generate transaction data without mock hash values
         const newTransaction = {
-            transactionHash: CryptoJS.SHA256(faker.string.uuid()).toString(),
+            transactionHash: '',  // Will be generated on the backend
             from: fromAddress,
             to: toAddress,
             amount: `${amount} ETH`,
-            gasUsed: faker.number.float({ min: 21000, max: 500000 }),
+            gasUsed: '',          // Placeholder; will be updated with backend data
             timestamp: new Date().toISOString(),
         };
+
         addNewTransaction(newTransaction);
         setAmount('');
+        setFromAddress('');
+        setToAddress('');
     };
 
     return (
@@ -46,7 +49,7 @@ const Transfer = ({ addNewTransaction, availableAddresses }) => {
                 <label className="block text-sm font-medium">To Address</label>
                 <select
                     value={toAddress}
-                    onChange={(e) => setFromAddress(e.target.value)}
+                    onChange={(e) => setToAddress(e.target.value)}
                     className="mt-1 block w-full p-2 border rounded-md"
                     required
                 >
