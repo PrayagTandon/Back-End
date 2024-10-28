@@ -1,21 +1,29 @@
-import React, { useState } from 'react';
+// Blocks.jsx
+
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import BlockDetails from './BlockDetails';
 
 const Blocks = ({ transactions }) => {
     const [selectedAddress, setSelectedAddress] = useState('');
-    const [selectedBlock, setSelectedBlock] = useState(null);
+    const [addresses, setAddresses] = useState([]);
+
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            try {
+                const response = await axios.get('/api/blocks/addresses');
+                setAddresses(response.data);
+            } catch (error) {
+                console.error("Error fetching addresses:", error);
+            }
+        };
+
+        fetchAddresses();
+    }, []);
 
     const handleOnChange = (e) => {
         const address = e.target.value;
         setSelectedAddress(address);
-
-        const block = transactions.find((tx) => tx.from === address || tx.to === address);
-
-        setSelectedBlock(block ? {
-            address: block.from,
-            balance: block.balance || 'N/A',
-            gasUsed: block.gasUsed || 'N/A'
-        } : null);
     };
 
     return (
@@ -28,19 +36,15 @@ const Blocks = ({ transactions }) => {
                 required
             >
                 <option value="">Select an Address</option>
-                {transactions.map((tx, index) => (
-                    <option key={index} value={tx.from}>
-                        {tx.from}
+                {addresses.map((address, index) => (
+                    <option key={index} value={address}>
+                        {address}
                     </option>
                 ))}
             </select>
 
-            {selectedBlock ? (
-                <BlockDetails {...selectedBlock} />
-            ) : (
-                <div className="bg-yellow-100 text-yellow-700 p-4 mt-4 rounded-md">
-                    Please enter a Valid Ethereum Address.
-                </div>
+            {selectedAddress && (
+                <BlockDetails address={selectedAddress} balance="N/A" gasUsed="N/A" />
             )}
         </div>
     );

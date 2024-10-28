@@ -1,4 +1,7 @@
+// Dashboard.jsx
+
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Transactions from './Transactions';
 import Transfer from './Transfer';
 import Blocks from './Blocks';
@@ -7,19 +10,25 @@ const Dashboard = ({ section }) => {
     const [transactions, setTransactions] = useState([]);
     const [latestBlocks, setLatestBlocks] = useState([]);
 
-    // This will be updated later to fetch data from the backend
+    // Fetch transaction history on mount
     useEffect(() => {
-        setTransactions([]);  // Empty initial state for transactions
-        setLatestBlocks([]);   // Empty initial state for latest blocks
+        const fetchTransactions = async () => {
+            try {
+                const response = await axios.get('/api/transactions/history');
+                setTransactions(response.data);
+                setLatestBlocks(response.data.slice(0, 2)); // Show the 2 latest blocks
+            } catch (error) {
+                console.error("Error fetching transactions:", error);
+            }
+        };
+
+        fetchTransactions();
     }, []);
 
-    // Add new transaction to all transactions and latest blocks list
     const addNewTransaction = (newTx) => {
         setTransactions((prevTx) => [newTx, ...prevTx]);
         setLatestBlocks((prevBlocks) => [newTx, ...prevBlocks.slice(0, 1)]);
     };
-
-    const availableAddresses = transactions.map((tx) => tx.from);
 
     return (
         <div className="m-6 backdrop-blur-2xl border-4 border-[#8e726a] rounded-md">
@@ -42,7 +51,7 @@ const Dashboard = ({ section }) => {
 
                     <div>
                         {section === 'transactions' && <Transactions transactions={transactions} />}
-                        {section === 'transfer' && <Transfer addNewTransaction={addNewTransaction} availableAddresses={availableAddresses} />}
+                        {section === 'transfer' && <Transfer addNewTransaction={addNewTransaction} />}
                         {section === 'blocks' && <Blocks transactions={transactions} />}
                     </div>
                 </div>
