@@ -17,10 +17,15 @@ const Transfer = ({ addNewTransaction }) => {
             const response = await axios.post('/api/transactions/send', {
                 source: fromAddress,
                 destination: toAddress,
-                amount: parseFloat(amount)  // Ensure amount is a number
+                amount: parseFloat(amount)
             });
-            setReceipt(response.data);  // Display receipt on successful transaction
-            addNewTransaction(response.data);  // Add new transaction to transaction history
+            setReceipt(response.data);
+            addNewTransaction(response.data);
+
+            // Clear the form fields after successful submission
+            setFromAddress('');
+            setToAddress('');
+            setAmount('');
         } catch (error) {
             console.error("Error sending transaction:", error);
         }
