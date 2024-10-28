@@ -8,21 +8,7 @@ const Transfer = ({ addNewTransaction }) => {
     const [fromAddress, setFromAddress] = useState('');
     const [toAddress, setToAddress] = useState('');
     const [amount, setAmount] = useState('');
-    const [addresses, setAddresses] = useState([]);
     const [receipt, setReceipt] = useState(null);
-
-    useEffect(() => {
-        const fetchAddresses = async () => {
-            try {
-                const response = await axios.get('/api/blocks/addresses');
-                setAddresses(response.data);
-            } catch (error) {
-                console.error("Error fetching addresses:", error);
-            }
-        };
-
-        fetchAddresses();
-    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,36 +32,26 @@ const Transfer = ({ addNewTransaction }) => {
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">From Address</label>
-                <select
+                <input
+                    type="text"
                     value={fromAddress}
                     onChange={(e) => setFromAddress(e.target.value)}
                     className="mt-1 block w-full p-2 border rounded-md"
                     required
-                >
-                    <option value="">Select From Address</option>
-                    {addresses.map((address, index) => (
-                        <option key={index} value={address}>
-                            {address}
-                        </option>
-                    ))}
-                </select>
+                    placeholder="Enter From Address"
+                />
             </div>
 
             <div className="mb-4">
                 <label className="block text-sm font-medium">To Address</label>
-                <select
+                <input
+                    type="text"
                     value={toAddress}
                     onChange={(e) => setToAddress(e.target.value)}
                     className="mt-1 block w-full p-2 border rounded-md"
                     required
-                >
-                    <option value="">Select To Address</option>
-                    {addresses.map((address, index) => (
-                        <option key={index} value={address}>
-                            {address}
-                        </option>
-                    ))}
-                </select>
+                    placeholder="Enter To Address"
+                />
             </div>
 
             <div className="mb-4">
@@ -86,6 +62,7 @@ const Transfer = ({ addNewTransaction }) => {
                     onChange={(e) => setAmount(e.target.value)}
                     className="mt-1 block w-full p-2 border rounded-md"
                     required
+                    placeholder="Enter Amount in ETH"
                 />
             </div>
 

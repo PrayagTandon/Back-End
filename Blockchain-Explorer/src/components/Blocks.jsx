@@ -6,15 +6,16 @@ import BlockDetails from './BlockDetails';
 
 const Blocks = ({ transactions }) => {
     const [selectedAddress, setSelectedAddress] = useState('');
-    const [addresses, setAddresses] = useState([]);
+    const [addresses, setAddresses] = useState([]);  // Initialize as an empty array
 
     useEffect(() => {
         const fetchAddresses = async () => {
             try {
                 const response = await axios.get('/api/blocks/addresses');
-                setAddresses(response.data);
+                setAddresses(Array.isArray(response.data) ? response.data : []);  // Ensure addresses is an array
             } catch (error) {
                 console.error("Error fetching addresses:", error);
+                setAddresses([]);  // Set to empty array on error
             }
         };
 
@@ -36,7 +37,7 @@ const Blocks = ({ transactions }) => {
                 required
             >
                 <option value="">Select an Address</option>
-                {addresses.map((address, index) => (
+                {(Array.isArray(addresses) ? addresses : []).map((address, index) => (
                     <option key={index} value={address}>
                         {address}
                     </option>

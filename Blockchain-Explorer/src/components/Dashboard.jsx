@@ -8,17 +8,18 @@ import Blocks from './Blocks';
 
 const Dashboard = ({ section }) => {
     const [transactions, setTransactions] = useState([]);
-    const [latestBlocks, setLatestBlocks] = useState([]);
+    const [latestBlocks, setLatestBlocks] = useState([]);  // Initialize as an empty array
 
-    // Fetch transaction history on mount
     useEffect(() => {
         const fetchTransactions = async () => {
             try {
                 const response = await axios.get('/api/transactions/history');
-                setTransactions(response.data);
-                setLatestBlocks(response.data.slice(0, 2)); // Show the 2 latest blocks
+                setTransactions(Array.isArray(response.data) ? response.data : []);
+                setLatestBlocks(Array.isArray(response.data) ? response.data.slice(0, 2) : []);
             } catch (error) {
                 console.error("Error fetching transactions:", error);
+                setTransactions([]);
+                setLatestBlocks([]);
             }
         };
 
@@ -38,7 +39,7 @@ const Dashboard = ({ section }) => {
                     <div className='w-[95%]'>
                         <h3 className="font-semibold text-lg mb-4">Latest Blocks</h3>
                         <ul className='flex flex-col gap-4'>
-                            {latestBlocks.map((block, index) => (
+                            {(Array.isArray(latestBlocks) ? latestBlocks : []).map((block, index) => (
                                 <li key={index} className="border-2 rounded-md py-3 px-4 bg-[#95a9f2] border-[#193dc1] flex flex-col gap-1">
                                     <strong>Transaction Hash:</strong> {block.transactionHash} <br />
                                     <strong>From:</strong> {block.from} <br />

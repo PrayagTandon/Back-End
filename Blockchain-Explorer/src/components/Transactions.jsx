@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Transactions = () => {
-    const [transactions, setTransactions] = useState([]);
+    const [transactions, setTransactions] = useState([]); // Initialize as an empty array
     const [currentPage, setCurrentPage] = useState(1);
     const transactionsPerPage = 6;
 
@@ -12,9 +12,10 @@ const Transactions = () => {
         const fetchTransactions = async () => {
             try {
                 const response = await axios.get('/api/transactions/history');
-                setTransactions(response.data);
+                setTransactions(Array.isArray(response.data) ? response.data : []); // Ensure transactions is an array
             } catch (error) {
                 console.error("Error fetching transactions:", error);
+                setTransactions([]); // Set to empty array on error
             }
         };
 
@@ -23,7 +24,9 @@ const Transactions = () => {
 
     const indexOfLastTransaction = currentPage * transactionsPerPage;
     const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
-    const currentTransactions = transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
+    const currentTransactions = Array.isArray(transactions)
+        ? transactions.slice(indexOfFirstTransaction, indexOfLastTransaction)
+        : []; // Ensure currentTransactions is always an array
 
     const totalPages = Math.ceil(transactions.length / transactionsPerPage);
 
@@ -31,7 +34,7 @@ const Transactions = () => {
         <div>
             <h3 className="font-semibold text-lg mb-4">All Transactions</h3>
             <ul className="flex flex-col gap-4">
-                {currentTransactions.map((tx, index) => (
+                {(Array.isArray(currentTransactions) ? currentTransactions : []).map((tx, index) => (
                     <li key={tx.transactionHash || index} className="border-2 rounded-md py-3 px-4 odd:bg-[#f584a0] even:bg-[#d381de] border-[#803a0c] flex flex-col gap-1">
                         <strong>Transaction Hash:</strong> {tx.transactionHash} <br />
                         <strong>From:</strong> {tx.from} <br />
