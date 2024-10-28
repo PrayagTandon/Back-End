@@ -4,11 +4,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BlockDetails from './BlockDetails';
 
-const Blocks = ({ transactions }) => {
+const Blocks = () => {
     const [selectedAddress, setSelectedAddress] = useState('');
     const [addresses, setAddresses] = useState([]);
-    const [selectedBlock, setSelectedBlock] = useState(null);
+    const [selectedTransactions, setSelectedTransactions] = useState([]);
 
+    // Fetch Ethereum addresses from backend on component mount
     useEffect(() => {
         const fetchAddresses = async () => {
             try {
@@ -16,7 +17,7 @@ const Blocks = ({ transactions }) => {
                 setAddresses(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
                 console.error("Error fetching addresses:", error);
-                setAddresses([]);
+                setAddresses([]); // Fallback to empty array on error
             }
         };
 
@@ -26,12 +27,18 @@ const Blocks = ({ transactions }) => {
     const handleOnChange = async (e) => {
         const address = e.target.value;
         setSelectedAddress(address);
-        try {
-            const response = await axios.get(`/api/blocks/details/${address}`);
-            setSelectedBlock(response.data);
-        } catch (error) {
-            console.error("Error fetching block details:", error);
-            setSelectedBlock(null);
+
+        // Only fetch transactions if a valid address is selected
+        if (address) {
+            try {
+                const response = await axios.get(`/api/blocks/details/${address}`);
+                setSelectedTransactions(response.data);
+            } catch (error) {
+                console.error("Error fetching transaction details:", error);
+                setSelectedTransactions([]);
+            }
+        } else {
+            setSelectedTransactions([]); // Clear transactions if no address is selected
         }
     };
 
@@ -45,15 +52,21 @@ const Blocks = ({ transactions }) => {
                 required
             >
                 <option value="">Select an Address</option>
-                {(Array.isArray(addresses) ? addresses : []).map((address, index) => (
+                {addresses.map((address, index) => (
                     <option key={index} value={address}>
                         {address}
                     </option>
                 ))}
             </select>
 
-            {selectedAddress && (
-                <BlockDetails address={selectedAddress} balance="N/A" gasUsed="N/A" />
+            {selectedTransactions.length > 0 ? (
+                selectedTransactions.map((transaction) => (
+                    <BlockDetails key={transaction.transactionHash} {...transaction} />
+                ))
+            ) : (
+                <div className="bg-yellow-100 text-yellow-700 p-4 mt-4 rounded-md">
+                    {selectedAddress ? 'No transactions found for this address.' : 'Please select an address.'}
+                </div>
             )}
         </div>
     );

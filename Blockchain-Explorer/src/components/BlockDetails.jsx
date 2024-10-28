@@ -1,31 +1,39 @@
+// BlockDetails.jsx
+
 import React from 'react';
 
-const BlockDetails = ({ address, balance, gasUsed }) => {
-    if (!address) {
-        return (
-            <div className="bg-yellow-100 text-yellow-700 p-4 mt-4 rounded-md">
-                Ethereum address is required to view block details.
-            </div>
-        );
-    }
-
+const BlockDetails = ({ transactionHash, from, to, amount, status, gasUsed }) => {
     return (
-        <div className="bg-white p-4 mt-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-bold mb-4">Block Details</h2>
+        <div className="bg-white p-4 mt-4 rounded-lg shadow-md border-4 border-yellow-600">
+            <h2 className="text-lg font-bold mb-4">Transaction Details</h2>
             <table className="min-w-full text-left text-sm">
-                <tbody>
-                    <tr>
-                        <td className="font-medium">Ethereum Address:</td>
-                        <td>{address}</td>
+                <tbody className='flex flex-col gap-3 justify-center'>
+                    <tr className='flex items-center gap-1'>
+                        <td className="font-medium">Transaction Hash:</td>
+                        <td>{transactionHash}</td>
                     </tr>
-                    <tr>
-                        <td className="font-medium">Balance:</td>
-                        <td>{balance}</td>
+                    <tr className='flex items-center gap-1'>
+                        <td className="font-medium">From:</td>
+                        <td>{from}</td>
                     </tr>
-                    <tr>
-                        <td className="font-medium">Gas Used:</td>
-                        <td>{gasUsed}</td>
+                    <tr className='flex items-center gap-1'>
+                        <td className="font-medium">To:</td>
+                        <td>{to}</td>
                     </tr>
+                    <tr className='flex items-center gap-1'>
+                        <td className="font-medium">Amount:</td>
+                        <td>{amount} ETH</td>
+                    </tr>
+                    <tr className='flex items-center gap-1'>
+                        <td className="font-medium">Status:</td>
+                        <td>{status}</td>
+                    </tr>
+                    {gasUsed && (
+                        <tr className='flex items-center gap-1'>
+                            <td className="font-medium">Gas Used:</td>
+                            <td>{gasUsed}</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
         </div>
